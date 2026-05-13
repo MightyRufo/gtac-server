@@ -59,16 +59,25 @@ download_and_extract() {
   url="$(echo "$DOWNLOADS_URL" | sed 's:/*$::')/server/${fname}"
   tmp="/tmp/gtac-${version}.tar.gz"
 
+  # Clean leftovers from any previous interrupted run before we start.
+  rm -f /tmp/gtac-*.tar.gz 2>/dev/null || true
+  rm -rf /tmp/gtac-stage-* 2>/dev/null || true
+
   log "fetching ${fname}"
   if ! curl -fsSL -A "gtac-docker/1.0" "$url" -o "$tmp"; then
     log "ERROR: download failed: $url"
+    rm -f "$tmp" 2>/dev/null || true
     return 1
   fi
 
   staging="/tmp/gtac-stage-$$"
-  rm -rf "$staging"
   mkdir -p "$staging"
-  tar -xzf "$tmp" -C "$staging"
+  if ! tar -xzf "$tmp" -C "$staging"; then
+    log "ERROR: extract failed for $tmp"
+    rm -f "$tmp"
+    rm -rf "$staging"
+    return 1
+  fi
   rm -f "$tmp"
 
   # GTAC archives ship a flat layout (Server, libmozjs-60.so, server.xml, resources/).
