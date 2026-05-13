@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>Grand-Theft-Auto-Connected-Server</Name>
+  <Repository>mightyrufo/gtac-server:latest</Repository>
+  <Registry>https://hub.docker.com/r/mightyrufo/gtac-server</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Project>https://github.com/MightyRufo/gtac-server</Project>
+  <Support>https://github.com/MightyRufo/gtac-server/issues</Support>
+  <TemplateURL>https://raw.githubusercontent.com/MightyRufo/gtac-server/main/unraid-template.xml</TemplateURL>
+  <Author>MightyRufo</Author>
+  <Beta>True</Beta>
+  <Overview>Grand Theft Auto Connected (GTA IV multiplayer) dedicated server. Auto-fetches the latest official Linux build on every start, or pin a specific version with GTAC_VERSION. Edit /config/server.xml and /config/resources to customise the server.&#xD;
+&#xD;
+[b]Update model:[/b] restart the container to pull the newest server build. The container scrapes the official downloads page, compares against the locally installed version, and only re-downloads when there's something newer. Your /config (server.xml, resources, htdocs) is never touched after the first boot.&#xD;
+&#xD;
+This is an unofficial community packaging of the GTA Connected dedicated server. Not affiliated with the GTAC project. See https://gtaconnected.com/ for the upstream.</Overview>
+  <Category>GameServers: Network:Other</Category>
+  <Icon>https://raw.githubusercontent.com/MightyRufo/gtac-server/main/icon.png</Icon>
+  <ExtraParams>--restart unless-stopped</ExtraParams>
+  <Date>2026-05-13</Date>
+  <Changes>### 0.1.0 (2026-05-13)
+- Initial release.
+- Auto-update from the upstream GTAC downloads page on every container start.
+- AMD64 + ARM64 (host-auto-detected).
+- /config seeded on first boot with stock server.xml + resources/.</Changes>
+  <Description>Grand Theft Auto Connected dedicated server for GTA IV multiplayer. The container resolves the newest official Linux build on every start, or pin a specific build with GTAC_VERSION. Config (server.xml, resources, htdocs) lives in /config. Logs in /data. Ports 22000 TCP + UDP. Runs non-root as uid/gid 1000.</Description>
+  <Config Name="Game port (TCP)" Target="22000" Default="22000" Mode="tcp" Description="Game traffic + built-in HTTP server. Must match &lt;port&gt; in server.xml." Type="Port" Display="always" Required="true" Mask="false">22000</Config>
+  <Config Name="Game port (UDP)" Target="22000" Default="22000" Mode="udp" Description="Game sync traffic. Must match &lt;port&gt; in server.xml." Type="Port" Display="always" Required="true" Mask="false">22000</Config>
+  <Config Name="Config volume" Target="/config" Default="/mnt/user/appdata/gtac/config" Mode="rw" Description="Holds server.xml, resources/, htdocs/. Edit these on the host then restart the container." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/gtac/config</Config>
+  <Config Name="Data volume" Target="/data" Default="/mnt/user/appdata/gtac/data" Mode="rw" Description="Holds logs/ — survives container recreates." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/gtac/data</Config>
+  <Config Name="Pinned version" Target="GTAC_VERSION" Default="" Mode="" Description="Pin a specific GTAC version (e.g. 1.7.3). Leave empty to auto-update to latest on every container restart." Type="Variable" Display="always" Required="false" Mask="false"/>
+  <Config Name="Skip update check" Target="GTAC_SKIP_UPDATE" Default="0" Mode="" Description="Set to 1 to skip the update check at start (offline/air-gapped use). The container will reuse the already-extracted Server binary in /opt/gtac." Type="Variable" Display="advanced" Required="false" Mask="false">0</Config>
+  <Config Name="Architecture override" Target="GTAC_ARCH" Default="" Mode="" Description="Force AMD64 or ARM64. Auto-detected from the host when empty." Type="Variable" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="Downloads URL" Target="GTAC_DOWNLOADS_URL" Default="https://gtaconnected.com/downloads/" Mode="" Description="Override only if mirroring upstream. The trailing slash is required." Type="Variable" Display="advanced" Required="false" Mask="false">https://gtaconnected.com/downloads/</Config>
+</Container>

@@ -1,0 +1,14 @@
+services:
+  gtac:
+    image: mightyrufo/gtac-server:latest
+    container_name: gtac
+    restart: unless-stopped
+    ports:
+      - "22000:22000/tcp"
+      - "22000:22000/udp"
+    volumes:
+      - ./config:/config
+      - ./data:/data
+    # Pin to a specific build by uncommenting:
+    # environment:
+    #   GTAC_VERSION: "1.7.3"
