@@ -9,7 +9,7 @@
   <Privileged>false</Privileged>
   <Project>https://github.com/MightyRufo/gtac-server</Project>
   <Support>https://github.com/MightyRufo/gtac-server/issues</Support>
-  <TemplateURL>https://raw.githubusercontent.com/MightyRufo/gtac-server/main/unraid-template.xml</TemplateURL>
+  <TemplateURL>https://raw.githubusercontent.com/MightyRufo/gtac-server/main/my-Grand-Theft-Auto-Connected-Server.xml</TemplateURL>
   <Author>MightyRufo</Author>
   <Beta>True</Beta>
   <Overview>Grand Theft Auto Connected (GTA IV multiplayer) dedicated server. Auto-fetches the latest official Linux build on every start, or pin a specific version with GTAC_VERSION. Edit /config/server.xml and /config/resources to customise the server.&#xD;

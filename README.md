@@ -90,7 +90,9 @@ Restart the container.
 
 ## Unraid
 
-1. Drop [`unraid-template.xml`](./unraid-template.xml) into `/boot/config/plugins/dockerMan/templates-user/` renamed to `my-gtac-server.xml`.
+1. Either paste this URL into Unraid → Docker → Add Container → Template:
+   `https://raw.githubusercontent.com/MightyRufo/gtac-server/main/my-Grand-Theft-Auto-Connected-Server.xml`
+   …or drop [`my-Grand-Theft-Auto-Connected-Server.xml`](./my-Grand-Theft-Auto-Connected-Server.xml) into `/boot/config/plugins/dockerMan/templates-user/` as-is.
 2. Docker tab → Add Container → User templates → **gtac-server**.
 3. Configure the volume paths and start.
 
