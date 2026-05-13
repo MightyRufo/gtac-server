@@ -171,17 +171,14 @@ link_runtime
 
 cd "$GTAC_HOME"
 
-# Tail the GTAC log directory into stdout so the Server's own log lines show up
-# in `docker logs`. GTAC writes per-day log files (e.g. logs/server-YYYY-MM-DD.log)
-# only when there's activity, so this stays quiet until something happens.
+# Tail the GTAC log directory into stdout as a safety net for any events the
+# Server writes to its log file but doesn't print on console.
 (
   while true; do
-    # -F retries on missing files; --pid kills the tail when Server exits.
-    # If logs/ has no files yet, sleep + retry so we pick up new ones.
     files="$(find "$DATA_DIR/logs" -maxdepth 1 -type f 2>/dev/null)"
     if [ -n "$files" ]; then
       # shellcheck disable=SC2086
-      exec tail -n 0 -F $files 2>/dev/null | sed 's/^/[server] /'
+      exec tail -n 0 -F $files 2>/dev/null | sed 's/^/[server-log] /'
     fi
     sleep 2
   done
@@ -189,7 +186,11 @@ cd "$GTAC_HOME"
 TAIL_PID=$!
 
 log "starting Server (PWD=$GTAC_HOME)"
-"$GTAC_HOME/Server" "$@" &
+# GTAC Server suppresses console output when stdout is not a TTY (isatty check).
+# Wrap it in script(1) which allocates a pseudo-tty so the full console output
+# — module loading, resource scan, listening port, connect/disconnect events —
+# reaches `docker logs` even when run detached.
+script -qfc "$GTAC_HOME/Server" /dev/null &
 SERVER_PID=$!
 
 # Forward common termination signals to Server, then clean up the tailer.
