@@ -11,13 +11,13 @@
   <Support>https://github.com/MightyRufo/gtac-server/issues</Support>
   <TemplateURL>https://raw.githubusercontent.com/MightyRufo/gtac-server/main/my-Grand-Theft-Auto-Connected-Server.xml</TemplateURL>
   <Author>MightyRufo</Author>
-  <Beta>True</Beta>
+  <Beta>true</Beta>
   <Overview>Grand Theft Auto Connected (GTA IV multiplayer) dedicated server. Auto-fetches the latest official Linux build on every start, or pin a specific version with GTAC_VERSION. Edit /config/server.xml and /config/resources to customise the server.&#xD;
 &#xD;
 [b]Update model:[/b] restart the container to pull the newest server build. The container scrapes the official downloads page, compares against the locally installed version, and only re-downloads when there's something newer. Your /config (server.xml, resources, htdocs) is never touched after the first boot.&#xD;
 &#xD;
 This is an unofficial community packaging of the GTA Connected dedicated server. Not affiliated with the GTAC project. See https://gtaconnected.com/ for the upstream.</Overview>
-  <Category>GameServers: Network:Other</Category>
+  <Category>GameServers:Other Network:Other</Category>
   <Icon>https://raw.githubusercontent.com/MightyRufo/gtac-server/main/icon.png</Icon>
   <ExtraParams>--restart unless-stopped</ExtraParams>
   <Date>2026-05-13</Date>
