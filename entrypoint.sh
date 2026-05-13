@@ -170,5 +170,32 @@ seed_config
 link_runtime
 
 cd "$GTAC_HOME"
+
+# Tail the GTAC log directory into stdout so the Server's own log lines show up
+# in `docker logs`. GTAC writes per-day log files (e.g. logs/server-YYYY-MM-DD.log)
+# only when there's activity, so this stays quiet until something happens.
+(
+  while true; do
+    # -F retries on missing files; --pid kills the tail when Server exits.
+    # If logs/ has no files yet, sleep + retry so we pick up new ones.
+    files="$(find "$DATA_DIR/logs" -maxdepth 1 -type f 2>/dev/null)"
+    if [ -n "$files" ]; then
+      # shellcheck disable=SC2086
+      exec tail -n 0 -F $files 2>/dev/null | sed 's/^/[server] /'
+    fi
+    sleep 2
+  done
+) &
+TAIL_PID=$!
+
 log "starting Server (PWD=$GTAC_HOME)"
-exec "$GTAC_HOME/Server" "$@"
+"$GTAC_HOME/Server" "$@" &
+SERVER_PID=$!
+
+# Forward common termination signals to Server, then clean up the tailer.
+trap 'kill -TERM "$SERVER_PID" 2>/dev/null; wait "$SERVER_PID"; kill "$TAIL_PID" 2>/dev/null; exit 0' INT TERM
+
+wait "$SERVER_PID"
+SERVER_RC=$?
+kill "$TAIL_PID" 2>/dev/null
+exit "$SERVER_RC"
