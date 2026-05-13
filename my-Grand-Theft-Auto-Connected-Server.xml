@@ -12,7 +12,9 @@
   <TemplateURL>https://raw.githubusercontent.com/MightyRufo/gtac-server/main/my-Grand-Theft-Auto-Connected-Server.xml</TemplateURL>
   <Author>MightyRufo</Author>
   <Beta>true</Beta>
-  <Overview>Grand Theft Auto Connected (GTA IV multiplayer) dedicated server. Auto-fetches the latest official Linux build on every start, or pin a specific version with GTAC_VERSION. Edit /config/server.xml and /config/resources to customise the server.&#xD;
+  <Overview>Grand Theft Auto Connected dedicated server. Auto-fetches the latest official Linux build on every start, or pin a specific version with GTAC_VERSION. Edit /config/server.xml and /config/resources to customise the server.&#xD;
+&#xD;
+[b][color=#e74c3c]FIRST-BOOT GOTCHA:[/color][/b] the stock upstream server.xml ships with [b]&lt;game&gt;gta:iii&lt;/game&gt;[/b] (GTA III). If you're hosting [b]GTA IV[/b], you must edit /config/server.xml after the first boot and change [b]gta:iii[/b] to [b]gta:iv[/b] (and set [b]iv_episode[/b] / [b]iv_gamemode[/b] to suit) or any GTA IV client will be kicked with "UNSUPPORTED ENGINE". Restart the container after editing.&#xD;
 &#xD;
 [b]Update model:[/b] restart the container to pull the newest server build. The container scrapes the official downloads page, compares against the locally installed version, and only re-downloads when there's something newer. Your /config (server.xml, resources, htdocs) is never touched after the first boot.&#xD;
 &#xD;
@@ -26,7 +28,9 @@ This is an unofficial community packaging of the GTA Connected dedicated server.
 - Auto-update from the upstream GTAC downloads page on every container start.
 - AMD64 + ARM64 (host-auto-detected).
 - /config seeded on first boot with stock server.xml + resources/.</Changes>
-  <Description>Grand Theft Auto Connected dedicated server for GTA IV multiplayer. The container resolves the newest official Linux build on every start, or pin a specific build with GTAC_VERSION. Config (server.xml, resources, htdocs) lives in /config. Logs in /data. Ports 22000 TCP + UDP. Runs non-root as uid/gid 1000.</Description>
+  <Description>Grand Theft Auto Connected dedicated server. The container resolves the newest official Linux build on every start, or pin a specific build with GTAC_VERSION. Config (server.xml, resources, htdocs) lives in /config. Logs in /data. Ports 22000 TCP + UDP. Runs non-root as uid/gid 1000.
+
+FIRST-BOOT GOTCHA: the stock upstream server.xml defaults to &lt;game&gt;gta:iii&lt;/game&gt; (GTA III). If you're hosting GTA IV, edit /config/server.xml after the first boot and change gta:iii to gta:iv (and set iv_episode / iv_gamemode for your install) or any GTA IV client will be kicked with "UNSUPPORTED ENGINE". Restart the container after editing.</Description>
   <Config Name="Game port (TCP)" Target="22000" Default="22000" Mode="tcp" Description="Game traffic + built-in HTTP server. Must match &lt;port&gt; in server.xml." Type="Port" Display="always" Required="true" Mask="false">22000</Config>
   <Config Name="Game port (UDP)" Target="22000" Default="22000" Mode="udp" Description="Game sync traffic. Must match &lt;port&gt; in server.xml." Type="Port" Display="always" Required="true" Mask="false">22000</Config>
   <Config Name="Config volume" Target="/config" Default="/mnt/user/appdata/gtac/config" Mode="rw" Description="Holds server.xml, resources/, htdocs/. Edit these on the host then restart the container." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/gtac/config</Config>

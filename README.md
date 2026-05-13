@@ -2,7 +2,9 @@
 
 > ⚠️ **Beta** — unofficial Docker packaging of the [Grand Theft Auto Connected](https://gtaconnected.com/) dedicated server. Not affiliated with the GTAC project.
 
-Self-hosted **GTA IV multiplayer** server in a container. The image is base-only — it grabs the latest Linux server binary from `gtaconnected.com/downloads/` on every start, so a `docker restart` is your update mechanism. Pin a specific build by setting `GTAC_VERSION`.
+Self-hosted **Grand Theft Auto Connected** dedicated server in a container. The image is base-only — it grabs the latest Linux server binary from `gtaconnected.com/downloads/` on every start, so a `docker restart` is your update mechanism. Pin a specific build by setting `GTAC_VERSION`.
+
+> ⚠️ **First-boot gotcha:** the stock upstream `server.xml` defaults to `<game>gta:iii</game>` (GTA III). If you're hosting **GTA IV**, edit `/config/server.xml` after the first boot and change `gta:iii` → `gta:iv` (and set `iv_episode` / `iv_gamemode` to suit), or any GTA IV client will be kicked with **"UNSUPPORTED ENGINE"**. Restart the container after editing.
 
 ## Features
 
